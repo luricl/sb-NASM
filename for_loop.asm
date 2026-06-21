@@ -1,4 +1,4 @@
-; Macros para um FOR mais simples
+; Macros para um FOR
 %macro for 3
     %push for
     mov %1, %2          ; inicialização
