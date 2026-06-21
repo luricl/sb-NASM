@@ -5,19 +5,18 @@
 Antes de compilar o programa, certifique-se de que os seguintes pacotes estejam instalados:
 
 - NASM (Netwide Assembler)
-- GCC com suporte a compilação 32 bits
-- Arquivos da biblioteca `asm_io` (`asm_io.inc` e `asm_io.asm`)
+- Software ld para linkagem dos arquivos
 
+## Como testar (Linux)
 
-## Como testar
+- Compile o código NASM para o formato objeto ELF: `nasm -g -f elf64 <nome_do_arquivo>.asm`
+- Faça o link do arquivo: `ld <nome_do_arquivo>.o -o <nome_do_arquivo>`
+- Execute o programa: `./<nome_do_arquivo>`
 
-**No Linux (usando GCC):**
-- Compile o código NASM para o formato objeto ELF: `nasm -f elf32 for_loop.asm`
-- Monte a biblioteca `asm_io`: `nasm -f elf32 -d ELF_TYPE asm_io.asm`
-- Ligue os objetos compilando o driver junto com a ajuda do GCC: `gcc -m32 for_loop.o asm_io.o -o for_loop`
-- Execute o programa: `./for_loop`
+## Como testar (Windows)
 
-**No Windows (usando GCC / MinGW):**
-- Compile o código NASM para o formato objeto Win32: `nasm -f win32 for_loop.asm`
-- Ligue os objetos usando o GCC: `gcc -o for_loop for_loop.obj asm_io.obj`
-- Execute o programa: `for_loop.exe`
+- Certifique-se de ter o **NASM** e o **Visual Studio (com C++ Build Tools)** instalados.
+- Abra o **Developer Command Prompt for VS**.
+- Compile o código NASM para o formato objeto Win64: `nasm -g -f win64 <nome_do_arquivo>.asm`
+- Faça o link do arquivo usando o linker da Microsoft: `link /subsystem:console /entry:_start <nome_do_arquivo>.obj /out:<nome_do_arquivo>.exe`
+- Execute o programa: `<nome_do_arquivo>.exe`

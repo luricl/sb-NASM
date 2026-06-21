@@ -1,6 +1,3 @@
-; Importação de rotinas de I/O via C
-%include "asm_io.inc"
-
 ; Macros para um FOR mais simples
 %macro for 3
     %push for
@@ -18,33 +15,31 @@
 %endmacro
 
 ; Segmento de Dados
-segment .data
-    msg_resultado db "O valor final no acumulador EAX e: ", 0
+section .data
+    digit: db 0, 10             ; primeiro byte (0) placeholder
+                                ; segundo byte (10) representando newline
 
 ; Segmento de Código
-segment .text
-global _asm_main
+section .text
+global _start
 
-_asm_main:
-    enter 0, 0
-    pusha
+_start:
+    mov ebx, 0
+    mov ecx, 0
 
-    xor eax, eax        ; acumulador = 0
-
-    for ecx, 0, 10
-        add eax, 2
+    for ecx, 0, 5
+        add ebx, 1
     endfor ecx
 
-    ; Salva o resultado, porque print_string usa EAX
-    mov ebx, eax
-
-    mov eax, msg_resultado
-    call print_string
-
     mov eax, ebx
-    call print_int
-    call print_nl
+    add eax, 48                     ; converte para ascii
+    mov [digit], al                 ; guarda caracteres ascii na variável digit
+    mov rax, 1                      ; seleciona a função write
+    mov rdi, 1                      ; define o file descriptor para stdout
+    mov rsi, digit                  ; assinala o endereço da variável a ser impressa
+    mov rdx, 2                      ; diz quantos bytes devem ser impressos
+    syscall
 
-    popa
-    leave
-    ret
+    mov rax, 60                     ; syscall exit
+    mov rdi, 0                      ; exit 0 
+    syscall
